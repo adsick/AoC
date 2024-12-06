@@ -1,7 +1,9 @@
 [package]
-name = "day1"
+name = "aoc"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-aoc = { path = "../../" }
+
+[workspace]
+members = ["2024/*"]
