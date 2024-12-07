@@ -87,6 +87,28 @@ fn count_xmas(mat: &Mat) -> u32 {
         s = (0, 0);
     }
 
+    count
+}
+
+fn is_ms(c1: char, c2: char) -> bool {
+    c1 == 'M' && c2 == 'S' || c1 == 'S' && c2 == 'M'
+}
+
+fn count_mas(m: &Mat) -> u32 {
+    let mut count = 0;
+    let a = m.len();
+
+    for i in 0..a - 2 {
+        for j in 0..a - 2 {
+            if m[i + 1][j + 1] != 'A' {
+                continue;
+            }
+
+            if is_ms(m[i][j], m[i + 2][j + 2]) && is_ms(m[i][j + 2], m[i + 2][j]) {
+                count += 1;
+            }
+        }
+    }
 
     count
 }
@@ -102,31 +124,31 @@ fn main() {
     let a: isize = 3;
     println!("{a}");
 
-    let c = count_xmas(&mat);
+    let c = count_mas(&mat);
 
     println!("ans: {c}");
 
-    for i in -a..=a {
-        for j in 0..a - i.abs() {
-            let mut p = (j, j);
+    // for i in -a..=a {
+    //     for j in 0..a - i.abs() {
+    //         let mut p = (j, j);
 
-            p.0 -= i.min(0);
-            p.1 += i.max(0);
+    //         p.0 -= i.min(0);
+    //         p.1 += i.max(0);
 
-            print!("{p:?} ")
-        }
-        println!()
-    }
+    //         print!("{p:?} ")
+    //     }
+    //     println!()
+    // }
 
-    for i in -a..=a {
-        for j in 0..a - i.abs() {
-            let mut p = (a - j - 1, j);
+    // for i in -a..=a {
+    //     for j in 0..a - i.abs() {
+    //         let mut p = (a - j - 1, j);
 
-            p.0 -= i.max(0);
-            p.1 -= i.min(0);
+    //         p.0 -= i.max(0);
+    //         p.1 -= i.min(0);
 
-            print!("{p:?} ")
-        }
-        println!()
-    }
+    //         print!("{p:?} ")
+    //     }
+    //     println!()
+    // }
 }
