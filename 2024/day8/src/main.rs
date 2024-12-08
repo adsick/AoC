@@ -58,35 +58,56 @@ fn main() {
                 let di = a2.i - a1.i;
                 let dj = a2.j - a1.j;
 
-                let i1 = a1.i - di;
-                let i2 = a2.i + di;
+                // let i1 = a1.i - di;
+                // let i2 = a2.i + di;
 
-                let j1 = a1.j - dj;
-                let j2 = a2.j + dj;
+                // let j1 = a1.j - dj;
+                // let j2 = a2.j + dj;
 
-                println!("candidates: ({i1}, {j1}), ({i2}, {j2})");
 
-                if i1 >= 0 && i1 < s as isize {
-                    if j1 >= 0 && j1 < s as isize {
-                        let p = &mut map[i1 as usize][j1 as usize];
+                let mut k = 1;
+                for _ in 0..2 {
+                    let mut i = a1.i;
+                    let mut j = a1.j;
 
+                    while i >= 0 && i < s as isize && j >= 0 && j < s as isize {
+                        let p = &mut map[i as usize][j as usize];
+    
                         if *p == 0 {
                             *p = c as _;
                             x += 1;
                         }
+    
+                        i += k * di;
+                        j += k * dj;
                     }
+                    k *= -1;
                 }
 
-                if i2 >= 0 && i2 < s as isize {
-                    if j2 >= 0 && j2 < s as isize {
-                        let p = &mut map[i2 as usize][j2 as usize];
 
-                        if *p == 0 {
-                            *p = c as _;
-                            x += 1;
-                        }
-                    }
-                }
+                // println!("candidates: ({i1}, {j1}), ({i2}, {j2})");
+
+                // if i1 >= 0 && i1 < s as isize {
+                //     if j1 >= 0 && j1 < s as isize {
+                //         let p = &mut map[i1 as usize][j1 as usize];
+
+                //         if *p == 0 {
+                //             *p = c as _;
+                //             x += 1;
+                //         }
+                //     }
+                // }
+
+                // if i2 >= 0 && i2 < s as isize {
+                //     if j2 >= 0 && j2 < s as isize {
+                //         let p = &mut map[i2 as usize][j2 as usize];
+
+                //         if *p == 0 {
+                //             *p = c as _;
+                //             x += 1;
+                //         }
+                //     }
+                // }
             }
 
             for r in map.iter() {
@@ -110,25 +131,25 @@ fn main() {
 
     println!("---------------------------------");
 
-    for (i, r) in OUTPUT.lines().enumerate() {
-        for (j, c) in r.chars().enumerate() {
+    // for (i, r) in OUTPUT.lines().enumerate() {
+    //     for (j, c) in r.chars().enumerate() {
 
-            let e = c == '#';
+    //         let e = c == '#';
 
-            let a = map[i][j] > 0;
+    //         let a = map[i][j] > 0;
 
-            if a != e {
-                if a {
-                    print!("E ")
-                } else {
-                    print!("e ")
-                }
-            } else if e {
-                print!("# ")
-            } else {
-                print!("  ")
-            }
-        }
-        println!();
-    }
+    //         if a != e {
+    //             if a {
+    //                 print!("E ")
+    //             } else {
+    //                 print!("e ")
+    //             }
+    //         } else if e {
+    //             print!("# ")
+    //         } else {
+    //             print!("  ")
+    //         }
+    //     }
+    //     println!();
+    // }
 }
