@@ -1,10 +1,6 @@
-use std::{
-    fmt::{Debug, Display},
-    thread::sleep,
-    time::Duration,
-};
+use std::fmt::{Debug, Display};
 
-const INPUT: &str = include_str!("../small-input.txt");
+const INPUT: &str = include_str!("../input.txt");
 
 fn solve1(blocks: &[u8]) -> u64 {
     let mut blocks = blocks.chunks_exact(2).enumerate();
@@ -118,21 +114,15 @@ fn solve2(blocks: &[u8]) -> u64 {
 
     let mut i = blocks.len() - 1;
 
-    loop {
-        if i == 0 {
-            break;
-        }
-
-        // sleep(Duration::from_millis(1));
-
-        // #[cfg(feature = "stdout")]
-        // println!("{i}");
+    // initially I iterated using a for loop through (0..blocks.len()).rev()
+    // but because I move blocks using insert, elements shift and when that happens I skipped elements
+    while i > 0 {
+        #[cfg(feature = "stdout")]
+        println!("{i}");
 
         let mut bi = blocks[i];
 
         if bi.moved {
-            // #[cfg(feature = "huge")]
-            // println!("<moved>");
             i -= 1;
             continue;
         }
@@ -151,6 +141,7 @@ fn solve2(blocks: &[u8]) -> u64 {
             println!("{res2}");
         }
 
+        // find a blocks that has enough space to fit the currently observed (blocks[i])
         let mut shift = false;
         for j in 0..i {
             if blocks[j].space >= bi.files {
@@ -168,76 +159,20 @@ fn solve2(blocks: &[u8]) -> u64 {
                     bj.ind, bi.ind, bj.files, bi.files, bj.space, bi.space
                 );
 
-                let t1: u64 = blocks
-                    .iter()
-                    .map(|b| b.files + b.space)
-                    .map(|s| s as u64)
-                    .sum();
+                let bi_occupied = bi.space + bi.files;
 
-                // breaks when j = i - 1
-                // blocks[i - 1].space += bi.files + bi.space;
-
-                // was  bj.space - bi.files
-
-                let biocc = bi.space + bi.files;
-
-                bi.space = if j == i - 1 {
-                    bj.space - bi.files + biocc
-                } else {
-                    bj.space - bi.files
-                };
+                bi.space = bj.space - bi.files;
 
                 bi.space = bj.space - bi.files;
                 bi.moved = true;
                 blocks[j].space = 0;
 
-
-                if i - 1 == j {
-                    println!(
-                        "before:\nb[i-1] = {:?},\nb[i] = {:?},\nb[i + 1] = {:?}",
-                        blocks[i - 1],
-                        blocks[i],
-                        blocks[i + 1],
-                    );
-                    println!("{}\n{}\n{}", blocks[i - 1], blocks[i], blocks[i + 1],)
-                }
-
-                // if j == i - 1 {
-                //     blocks[i].space += blocks[j].space;
-                //     blocks[i].moved = true;
-                //     blocks[j].space = 0;
-                // } else {
-                //     blocks.remove(i);
-                //     blocks.insert(j, bi);
-                // }
                 blocks.remove(i);
                 blocks.insert(j + 1, bi);
 
-                blocks[i].space += biocc;
-
-
+                blocks[i].space += bi_occupied;
 
                 shift = true;
-                if i - 1 == j {
-                    println!(
-                        "after:\nb[i-1] = {:?},\nb[i] = {:?},\nb[i + 1] = {:?}",
-                        blocks[i - 1],
-                        blocks[i],
-                        blocks[i + 1],
-                    );
-
-                    println!("{}\n{}\n{}", blocks[i - 1], blocks[i], blocks[i + 1],)
-                }
-                let t2: u64 = blocks
-                    .iter()
-                    .map(|b| b.files + b.space)
-                    .map(|s| s as u64)
-                    .sum();
-
-                if t1 != t2 {
-                    println!("leak: {t1} != {t2}\ni = {i}\nj = {j}\nbi: {bi:?}\nbj: {bj:?}\n\nblocks[i] =     {:?}\nblocks[i - 1] = {:?}", blocks[i], blocks[i - 1]);
-                    println!("{bi}\n{bj}\n\n{}{}", blocks[i], blocks[i - 1])
-                }
 
                 #[cfg(feature = "huge")]
                 {
@@ -264,15 +199,11 @@ fn solve2(blocks: &[u8]) -> u64 {
             i -= 1;
         }
 
-        // #[cfg(feature = "stdout")]
-        // println!("{:-<90}", "");
+        #[cfg(feature = "huge")]
+        println!("{:-<90}", "");
     }
 
     let mut checksum = 0;
-
-    // for (i, b) in blocks.iter().enumerate() {
-    //     println!("{i:<5}: {b:?}")
-    // }
 
     let mut i = 0;
     for b in blocks {
@@ -281,7 +212,6 @@ fn solve2(blocks: &[u8]) -> u64 {
 
         for _ in 0..b.files {
             checksum += b.ind as u64 * i;
-            // println!("{:<5} * {:<5} = {}", i, b.ind, checksum);
             i += 1;
         }
         i += b.space as u64;
@@ -298,16 +228,13 @@ fn main() {
         .map(|c| c.to_digit(10).unwrap() as u8)
         .collect();
 
-    // padding
+    // padding for `chunks_exact` (I'm a chill guy)
     if blocks.len() % 2 == 1 {
         println!("padded");
         blocks.push(0);
     }
 
-    // println!("ans1: {}", solve1(&blocks));
-    println!("ans2:\t{}", solve2(&blocks));
-    println!("toohig:\t6547228390670");
-    // println!("expect:\t6237075041489");
-    println!("toolow:\t6547175298248");
+    println!("ans1: {}", solve1(&blocks));
+    println!("ans2: {}", solve2(&blocks));
     // println!("0 0 9 9 2 1 1 1 7 7 7 . 4 4 . 3 3 3 . . . . 5 5 5 5 . 6 6 6 6 . . . . . 8 8 8 8 . .")
 }
