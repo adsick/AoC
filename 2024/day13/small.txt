@@ -1,5 +1,21 @@
 Button A: X+94, Y+34
 Button B: X+22, Y+67
+Prize: X=94, Y=34
+
+Button A: X+94, Y+34
+Button B: X+22, Y+67
+Prize: X=22, Y=67
+
+Button A: X+94, Y+34
+Button B: X+22, Y+67
+Prize: X=188, Y=68
+
+Button A: X+94, Y+34
+Button B: X+22, Y+67
+Prize: X=44, Y=134
+
+Button A: X+94, Y+34
+Button B: X+22, Y+67
 Prize: X=8400, Y=5400
 
 Button A: X+26, Y+66
