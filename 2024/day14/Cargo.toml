@@ -1,0 +1,9 @@
+[package]
+name = "day14"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+aoc = { version = "0.1.0", path = "../.." }
+colored = "2.1.0"
+clearscreen = "3.0.0"
