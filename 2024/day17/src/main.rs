@@ -110,6 +110,68 @@ impl State {
 
         Some(out)
     }
+
+    fn runi(&mut self) -> Option<u64> {
+        let s = self;
+        let mut out = None;
+
+        // the program should halt, so it's at the end
+
+        // let mut i = s.p.len() - 2;
+        
+        //if self.a != 0
+
+        // the last instruction is just a jump back if a != 0
+        // so halt case means that a == 0
+
+        s.a = 0;
+
+        // previous operation is a /= 8 (`a /= 2^combo(3)`, combo(3) = 3)
+        // so a = 0 if a < 8
+
+        // next previous operations:
+        // out(5) O = B % 8                 (comb(5) = B)
+
+        // and this out(5) should also equal the current byte of the program!
+
+
+        // bxc(*) B = B^C                   (argument is ignored)
+        // bxl(6) B = B xor 6 = B xor 110
+        // cdv(5) C = A / 2^B               (comb(5) = B)
+        // bxl(5) B = B ^ 5
+        // bst(4) B = A % 8
+
+        // and here we came from previous iteration of the loop...
+
+        // registers C and B should be 0 at the start 
+
+
+        let Some([c, o]) = s.p.get(s.i..s.i + 2) else {
+            return None;
+        };
+
+        let mut increment = true;
+        match c {
+            0 => s.adv(*o),
+            1 => s.bxl(*o),
+            2 => s.bst(*o),
+            3 => {
+                increment = s.jnz(*o);
+            }
+            4 => s.bxc(*o),
+            5 => out = Some(s.out(*o)),
+            6 => s.bdv(*o),
+            7 => s.cdv(*o),
+
+            _ => unreachable!(),
+        }
+
+        if increment {
+            s.i += 2;
+        }
+
+        todo!()
+    }
 }
 
 fn solve1(mut s: State) -> Vec<u8> {
